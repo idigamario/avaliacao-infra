@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+  labels:
+    type: aws-ebs
+  spec:
+    storageClassName: gp2
+    claimRef:
+      name: mongodb-pv-claim
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 10Gi
+    persistentVolumeSource:
+      awsEBS:
+        volumeType: gp2
+        volumeID: $VOLUMEID
+        fsType: ext4
+        region: $REGION 
+        zone: $ZONE 

@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: app-configmap
+metadata:
+  name: <nome-do-configmap>
+data:
+  mongo_url: $mongo_url
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avaliacao-infra
+  labels:
+    app: avaliacao-infra
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: avaliacao-infra
+  template:
+    metadata:
+      labels:
+        app: avaliacao-infra
+    spec:
+      containers:
+      - name: avaliacao-infra
+        image: $IMAGE_DA_SUA_APLICACAO
+        envFrom:
+          - configMapRef:
+              name: app-configmap
+        port: $PORT
+        livenessProbe:
+          httpGet:
+            path: /
+            port: $PORT
+            initialDelaySeconds: 30
+            periodSeconds: 60
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: avaliacao-infra-service
+  labels:
+    app: avaliacao-infra
+spec:
+  type: LoadBalancer
+  selector:
+    app: avaliacao-infra
+  ports:
+  - port: $SERVICE_PORT
+    targetPort: $PORT
+    protocol: TCP
+
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: avaliacao-infra-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.hosts: $DOMINIO
+  spec:
+    rules:
+    - http:
+        paths:
+        - path: / # Raiz do domínio
+          backend:
+            service:
+              name: avaliacao-infra-service
+              port: $SERVICE_PORT 

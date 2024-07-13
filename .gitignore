@@ -1,3 +1,6 @@
 mongo-volume
 node_modules
 .env
+terraform.tfstate
+.terraform.tfstate.lock.info
+.terraform*

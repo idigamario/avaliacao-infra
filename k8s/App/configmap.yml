@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: app-configmap
+metadata:
+  name: <nome-do-configmap>
+data:
+  mongo_url: $mongo_url

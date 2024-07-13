@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: avaliacao-infra-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.hosts: $DOMINIO
+  spec:
+    rules:
+    - http:
+        paths:
+        - path: / # Raiz do domínio
+          backend:
+            service:
+              name: avaliacao-infra-service
+              port: $SERVICE_PORT 

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: avaliacao-infra-service
+  labels:
+    app: avaliacao-infra
+spec:
+  type: LoadBalancer
+  selector:
+    app: avaliacao-infra
+  ports:
+  - port: $SERVICE_PORT
+    targetPort: $PORT
+    protocol: TCP
