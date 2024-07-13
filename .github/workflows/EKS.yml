@@ -32,9 +32,11 @@ jobs:
     - run: aws eks update-kubeconfig --region us-east-1 --name avaliacao-infra
     
     - run: kubectl get svc
-    
-    - run: kubectl apply -f k8a/App/app.yml
 
-    - run: kubectl apply -f k8a/DB/db.yml
+    - run: kubectl apply -f k8s/Ingress/
+    
+    - run: kubectl apply -f k8s/App/app.yml
+
+    - run: kubectl apply -f k8s/DB/db.yml
     
     - run: kubectl set image deployment/avaliacao-infra avaliacao-infra={{$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG}}
